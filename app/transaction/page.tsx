@@ -4,7 +4,7 @@ import TransactionForm from "@/components/page-2/transaction-form";
 import SaveButton from "@/components/page-2/save-button";
 export default function Transaction(){
   return(
-    <div>
+    <div className="p-4">
       <div>
         <AddTransaction>
         </AddTransaction>

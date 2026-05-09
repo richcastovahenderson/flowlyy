@@ -1,13 +1,18 @@
 import { Card } from "@/components/ui/card";
 import { Home , Wifi , Zap } from "lucide-react";
-export default function Bills() {
+export default function Bills() {   
     
  return(
 
-    <div>
+    <div className="p-4">
+        
         <div className="flex justify-between items-center mb-4">
-            <h2 className="text-white font-bold text-lg">Upcoming Bills</h2>
+            <h2 className="text-gray-400 font-bold text-lg">Recurring</h2>
             <span className="text-gray-400 text-sm">See all</span>
+        </div>
+
+        <div className="text-gray-600 font-bold text-lg mb-4">
+            <h2>AUTOMATIC PAYMENTS & INCOME</h2>
         </div>
 
         <Card className="bg-[#1a2e1a] border border-green-300 mb-3">
