@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { House, BarChart2, Plus, ReceiptText, Settings } from "lucide-react"
+import { House, LayoutGrid, Plus, ReceiptText, User } from "lucide-react"
 import { Button } from "./ui/button"
 export default function BottomNavbar() {
   return (
@@ -15,13 +15,14 @@ export default function BottomNavbar() {
         </div>
       </Link>      
 
-      
-      <div className="flex items-center text-white">
-        <Button className="bg-[#0a2a1a]">            
-            <BarChart2 size={15} />
-             <span className="text-xs">Analysis</span>
-        </Button>
-      </div>        
+      <Link href="/category">
+        <div className="flex items-center text-white">
+          <Button className="bg-[#0a2a1a]">            
+              <LayoutGrid size={15} />
+              <span className="text-xs">Category</span>
+          </Button>
+        </div>        
+      </Link>
     
 
       <Link href="/transaction">
@@ -43,12 +44,14 @@ export default function BottomNavbar() {
         </div>
       </Link>
 
-      <div className="flex items-center text-white">
-        <Button className="bg-[#0a2a1a]">            
-            <Settings size={15} />
-            <span className="text-xs">Settings</span>
-        </Button>
-      </div>
+      <Link href="/accounts">
+        <div className="flex items-center text-white">
+          <Button className="bg-[#0a2a1a]">            
+              <User size={15} />
+              <span className="text-xs">Account</span>
+          </Button>
+        </div>
+      </Link>
 
     </div>
   )

@@ -1,3 +1,4 @@
+"use client"
 import AddTransaction from "@/components/page-2/header";
 import AmountInput from "@/components/page-2/amount-numpad";
 import TransactionForm from "@/components/page-2/transaction-form";

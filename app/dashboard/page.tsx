@@ -55,7 +55,7 @@ export default function Dashboard() {
                 </div>
 
                 <Avatar size="lg">
-                    <AvatarImage src="/avatar.png" />
+                    <AvatarImage src="https://github.com/shadcn.png" />
                     <AvatarFallback>RH</AvatarFallback>
                 </Avatar>
             </div>
@@ -102,7 +102,7 @@ export default function Dashboard() {
 
                 {
                     BILLS.map((b) => (
-                        <div>
+                        <div key={b.id}>
                             <div className="flex justify-between items-center">
                                 <div>
                                     <p>{ b.billDesc }</p>
