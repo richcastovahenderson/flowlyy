@@ -1,11 +1,14 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Delete } from "lucide-react"
 
-export default function AmountInput() {
-  const [amount, setAmount] = useState("0")
+export default function AmountInput({
+  amount,
+  setAmount,
+  type,
+  setType
+}: any){
 
   const handleNumber = (num: string) => {
     if (amount === "0") {
@@ -20,33 +23,32 @@ export default function AmountInput() {
         setAmount("0")
     } else {
         setAmount(amount.slice(0, -1))
-    }0
+    }
   }
 
-   const [type, setType] = useState ("")
 
   return (
     <div className="flex flex-col items-center p-6 gap-6">
       
-      
-        <div className="flex w-[300px] rounded-full bg-gray-200 p-2">
-            <div className="flex w-[300px] rounded-full bg-gray-200 p-2">
-                <button
-                    onClick={() => setType("expense")}
-                    className={`w-full rounded-full p-2 text-sm font-semibold text-center ${type === "expense" ? "bg-red-600 text-white" : "text-gray-400"}`}
-                    >
-                        Expense
-                </button>
+      {/* Tabs for Expense and Income */}
+      <div className="flex w-[300px] rounded-full bg-gray-200 p-2">
+          <div className="flex w-[300px] rounded-full bg-gray-200 p-2">
+              <button
+                  onClick={() => setType("expense")}
+                  className={`w-full rounded-full p-2 text-sm font-semibold text-center ${type === "expense" ? "bg-red-600 text-white" : "text-gray-400"}`}
+                  >
+                      Expense
+              </button>
 
-                <button
-                    onClick={() => setType("income")}
-                    className={`w-full rounded-full p-2 text-sm font-semibold text-center ${type === "income" ? "bg-green-600 text-white" : "text-gray-400"}`}
-                >
-                    Income
-                </button>
-            </div>
+              <button
+                  onClick={() => setType("income")}
+                  className={`w-full rounded-full p-2 text-sm font-semibold text-center ${type === "income" ? "bg-green-600 text-white" : "text-gray-400"}`}
+              >
+                  Income
+              </button>
+          </div>
 
-        </div>
+      </div>
 
       {/* Amount Display */}
       <div className="flex flex-col items-center gap-1">
