@@ -1,35 +1,49 @@
 "use client"
-import TransactionHeader from "@/components/header"
 import SaveButton from "@/components/save-button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ShoppingBag } from "lucide-react"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { FileText } from "lucide-react"
 import { RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Delete } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Input } from "@/components/ui/input"
 import { ChevronRight } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import Header from "@/components/header"
 import { Switch } from "@/components/ui/switch"
+import { api } from "@/lib/api"
 
 export default function Transaction(){
   const [amount, setAmount] = useState("0")
   const [type, setType] = useState("expense")
 
-  const [category, setCategory] = useState("")
+  const [category, setCategory] = useState<number | null>(null)
   const [date, setDate] = useState(
     new Date().toISOString().split("T")[0]
   )
   const [open, setOpen] = useState(false)
-  const [categories, setCategories] = useState<string[]>([])
+  const [categories, setCategories] = useState<number[]>([])
+  const [categoryName, setCategoryName] = useState("")
   
   const [note, setNote] = useState("")
   const [recurring, setRecurring] = useState(false)
   const [inputValue, setInputValue] = useState("")
+
+  useEffect(() => {
+    loadCategories()
+  }, [])
+
+  const loadCategories = async () => {
+    try {
+      const data = await api("/categories")
+      setCategories(data)
+    } catch (err) {
+      console.error(err)
+      alert("Failed to load categories")
+    }
+  }
 
   const handleNumber = (num: string) => {
     if (amount === "0") {
@@ -121,7 +135,7 @@ export default function Transaction(){
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <div className="flex items-center gap-1 text-gray-400 cursor-pointer">
-                <p className="text-sm">{category}</p>
+                <p className="text-sm">{categoryName || "Select Category"}</p>
                 <ChevronRight size={14} />
               </div>
             </PopoverTrigger>
@@ -133,31 +147,18 @@ export default function Transaction(){
                   onValueChange={setInputValue}
                 />
                 <CommandList>
-                  <CommandEmpty>
-                    <button
-                      className="text-sm text-blue-500 bg-amber-100 rounded-md px-2"
-                      onClick={() => {
-                        if (inputValue) {
-                          setCategories([...categories, inputValue])
-                          setCategory(inputValue)
-                          setInputValue("")
-                          setOpen(false)
-                        }
-                      }}
-                    >
-                      + Add "{inputValue}"
-                    </button>
-                  </CommandEmpty>
+                  <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup>
-                    {categories.map((cat) => (
+                    {categories.map((cat: any) => (
                       <CommandItem
-                        key={cat}
+                        key={cat.id}
                         onSelect={() => {
-                          setCategory(cat)
+                          setCategory(cat.id)
+                          setCategoryName(`${cat.icon} ${cat.name}`)
                           setOpen(false)
                         }}
                       >
-                        {cat}
+                        {cat.icon} {cat.name}
                       </CommandItem>
                     ))}
                   </CommandGroup>

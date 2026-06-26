@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { House, LayoutGrid, Plus, ReceiptText, User } from "lucide-react"
+import { House, LayoutGrid, Plus, ReceiptText, User, History } from "lucide-react"
 import { Button } from "./ui/button"
 export default function BottomNavbar() {
   return (
@@ -23,6 +23,17 @@ export default function BottomNavbar() {
           </Button>
         </div>        
       </Link>
+
+      
+      <Link href="/history">
+        <div className="flex items-center text-white">
+          <Button className="bg-[#0a2a1a]">            
+              <History size={15} />
+              <span className="text-xs">History</span>
+          </Button>
+        </div>        
+      </Link>
+
     
 
       <Link href="/transaction">

@@ -1,36 +1,42 @@
+"use client"
+
 import { 
     Avatar, 
     AvatarFallback, 
     AvatarImage 
 } from "@/components/ui/avatar"
+
 import {
     Card,
     CardContent
 } from "@/components/ui/card"
 
+import { api } from "@/lib/api"
+
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 export default function Dashboard() {
-    const BILLS = [
-        {
-            id: 1,
-            billDesc: 'Rent',
-            date: 'Mar 14',
-            amount: 30000
-        },
-        {
-            id: 2,
-            billDesc: 'Salary',
-            date: 'Mar 14',
-            amount: 30000
-        },
-        {
-            id: 3,
-            billDesc: 'Phone Bill',
-            date: 'Mar 14',
-            amount: 30000
-        },
-    ]
+    const [dashboard, setDashboard] = useState({
+        money_in: "0",
+        money_out: "0",
+        net_cashflow: "0",
+        health_status: "",
+        upcoming: [],
+    })
+    
+    useEffect(() => {
+        loadDashboard()
+    }, [])
+
+    const loadDashboard = async () => {
+        try {
+            const data = await api("/dashboard")
+            setDashboard(data)
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     const getHour = (): string => {
         const hour = new Date().getHours()
@@ -64,14 +70,14 @@ export default function Dashboard() {
                 <Card className="bg-[#F7F5F1]">
                     <CardContent>
                         <p className="mb-2">MONEY IN</p>
-                        <h4 className="text-[#4CAF82] text-xl font-semibold">Rp. 40,000</h4>
+                        <h4 className="text-[#4CAF82] text-xl font-semibold">Rp. {Number(dashboard.money_in).toLocaleString()}</h4>
                     </CardContent>
                 </Card>
 
                 <Card className="bg-[#F7F5F1]">
                     <CardContent>
                         <p className="mb-2">MONEY OUT</p>
-                        <h4 className="text-[#E07070] text-xl font-semibold">Rp. 20,000</h4>
+                        <h4 className="text-[#E07070] text-xl font-semibold">Rp. {Number(dashboard.money_out).toLocaleString()}</h4>
                     </CardContent>
                 </Card>
             </div>
@@ -82,12 +88,12 @@ export default function Dashboard() {
                         <div className="flex justify-between items-center">
                             <div>
                                 <p className="text-gray-500 mb-2 font-semibold">NET CASHFLOW</p>
-                                <h3 className="text-white text-3xl font-semibold mb-2">+Rp. 45,000</h3>
+                                <h3 className="text-white text-3xl font-semibold mb-2">+Rp. {Number(dashboard.net_cashflow).toLocaleString()}</h3>
                                 <p className="text-gray-500 font-semibold">up 12% vs last month</p>
                             </div>
 
                             <div className="bg-green-400/10 text-green-500 w-fit rounded-full px-3 font-semibold">
-                                Healthy
+                                {dashboard.health_status}
                             </div>
                         </div>
                     </CardContent>
@@ -101,14 +107,14 @@ export default function Dashboard() {
                 </div>
 
                 {
-                    BILLS.map((b) => (
+                    dashboard.upcoming.map((b: any) => (
                         <div key={b.id}>
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <p>{ b.billDesc }</p>
-                                    <p className="text-xs text-slate-400">Expected { b.date }</p>
+                                    <p>{ b.name}</p>
+                                    <p className="text-xs text-slate-400">Expected { b.next_date }</p>
                                 </div>
-                                <p>Rp. { b.amount.toLocaleString() }</p>
+                                <p>Rp. { Number(b.amount).toLocaleString() }</p>
                             </div>
 
                             <hr className="my-2"/>

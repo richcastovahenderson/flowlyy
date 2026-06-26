@@ -5,6 +5,13 @@ class Api::V1::DashboardController < ApplicationController
     money_in = transactions.income.this_month.sum(:amount)
     money_out = transactions.expense.this_month.sum(:amount)
     net_cashflow = money_in - money_out
+    health_status = if net_cashflow > 0
+                      "Healthy"
+                    elsif net_cashflow == 0
+                      "Balanced"
+                    else
+                      "At Risk"
+                    end
 
     upcoming = current_user.recurrings.active.order(:next_date).limit(5).map do |r|
       {
@@ -17,10 +24,12 @@ class Api::V1::DashboardController < ApplicationController
       }
     end
 
+
     render json: {
       money_in: money_in,
       money_out: money_out,
       net_cashflow: net_cashflow,
+      health_status: health_status,
       upcoming: upcoming
     }, status: :ok
   end

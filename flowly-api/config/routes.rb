@@ -20,8 +20,10 @@ Rails.application.routes.draw do
       resources :transactions, only: [:index, :create, :update, :destroy]
 
       # Recurrings
+     # Recurrings
       resources :recurrings, only: [:index, :create, :update, :destroy] do
-      patch :"recurring/id/toggle", to: 'recurrings#toggle'
+      patch :toggle, on: :member
+      end
 
       # Dashboard
       get 'dashboard', to: 'dashboard#index'

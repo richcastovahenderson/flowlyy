@@ -5,9 +5,41 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { useState } from "react"
 
 export default function LoginPage() {
   const router = useRouter()
+  const handleLogin = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/api/v1/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      alert(data.error || "Login gagal")
+      return
+    }
+
+    localStorage.setItem("token", data.token)
+
+    alert("Login berhasil")
+    router.push("/dashboard")
+  } catch (err) {
+    console.error(err)
+    alert(String(err))
+  }
+}
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -19,15 +51,29 @@ export default function LoginPage() {
         <CardContent className="space-y-4">
           <div className="space-y-1.5">
             <Label>Email</Label>
-            <Input type="email" placeholder="nama@email.com" />
+            <Input
+             type="email"
+             placeholder="nama@email.com"
+             value={email}
+             onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="space-y-1.5">
             <Label>Password</Label>
-            <Input type="password" placeholder="••••••••" />
+
+            <Input
+             type="password"
+             placeholder="••••••••"
+             value={password}
+             onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
-          <Button className="w-full" onClick={() => router.push("/dashboard")}>
+
+          <Button 
+           className="w-full" onClick={handleLogin}>
             Masuk
           </Button>
+
         </CardContent>
       </Card>
     </div>

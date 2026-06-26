@@ -1,6 +1,6 @@
 class Api::V1::RecurringsController < ApplicationController
   def index
-    recurrings = current_user.recurrings.includes(:category).order(created_at: :desc)
+    recurrings = current_user.recurrings.includes(:category).order(next_date: :desc)
     render json: recurrings.map { |r| recurring_data(r) }, status: :ok
   end
 

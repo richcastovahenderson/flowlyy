@@ -1,6 +1,8 @@
 "use client"
 
 import {Button} from "@/components/ui/button"
+import {api} from "@/lib/api"
+import {useRouter} from "next/navigation"
 
 export default function SaveButton({
     amount,
@@ -11,18 +13,31 @@ export default function SaveButton({
     recurring
 }: any) {
 
-    const handleSave = () => {
-        alert(
-            JSON.stringify({    
-                amount,
-                type,
-                category,
-                date,
-                note,
-                recurring
-            })
-        )
-    }
+    const router = useRouter()
+
+  const handleSave = async () => {
+    try {
+      await api("/transactions", {
+        method: "POST",
+        body: JSON.stringify({
+        amount: Number(amount),
+        transaction_type: type,
+        category_id: category,
+        date,
+        notes: note,
+        is_recurring: recurring,
+      }),
+    })
+
+    alert("Transaction berhasil ditambahkan")
+
+    router.push("/dashboard")
+
+  } catch (err) {
+    console.error(err)
+    alert("Gagal menyimpan transaksi")
+  }
+}
 return(
 
     <div className="p-4">
