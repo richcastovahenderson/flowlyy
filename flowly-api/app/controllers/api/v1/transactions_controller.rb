@@ -15,6 +15,19 @@ class Api::V1::TransactionsController < ApplicationController
   def create
     transaction = current_user.transactions.new(transaction_params)
     if transaction.save
+      Rails.logger.info "is_recurring = #{transaction.is_recurring.inspect}"
+      if transaction.is_recurring
+        current_user.recurrings.create(
+          name: transaction.notes.present? ? transaction.notes : "Recurring",
+          amount: transaction.amount,
+          recurring_type: transaction.transaction_type,
+          day_of_month: transaction.date.day,
+          frequency: "monthly",
+          next_date: transaction.date,
+          category_id: transaction.category_id,
+          is_active: true
+        )
+      end
       render json: transaction_data(transaction), status: :created
     else
       render json: { errors: transaction.errors.full_messages }, status: :unprocessable_entity

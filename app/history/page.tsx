@@ -1,8 +1,10 @@
 "use client"
 
+import {Trash2} from "lucide-react"
 import { useEffect, useState } from "react"
 import Header from "@/components/header"
 import { api } from "@/lib/api"
+import { Button } from "@/components/ui/button"
 
 export default function History() {
 
@@ -19,6 +21,20 @@ export default function History() {
     } catch (err) {
       console.error(err)
       alert("Failed to load transactions")
+    }
+  }
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Delete transaction?")) return
+
+    try {
+      await api(`/transactions/${id}`, {
+        method: "DELETE",
+      })
+      loadTransactions()
+    } catch (err) {
+      console.error(err)
+      alert("Failed to delete transaction")
     }
   }
 
@@ -65,6 +81,14 @@ export default function History() {
               {t.transaction_type === "income" ? "+" : "-"}
               Rp {Number(t.amount).toLocaleString()}
             </p>
+
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => handleDelete(t.id)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
 
           </div>
 
